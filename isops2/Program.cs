@@ -29,8 +29,6 @@ namespace isops2
                         Console.WriteLine("No es iso de ps2 :c");
                     else
                     {
-                        // PS2 games use a standard .iso image. One of the filenames is the id (also known as the SLUS file if you're running a US game)
-                        // Use DiskUtils to find it
                         var regex = new Regex(@"[A-Z]{4}_[0-9]+.[0-9]+"); // the regex matches a string of the form "<4 characters>_<some number>.<some number>"
                         CDReader reader = new(isoRom, true);
                         var id = reader.Root.GetFiles()
