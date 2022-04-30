@@ -14,7 +14,6 @@ namespace isops2
             if (args.Length == 1)
             {
                 String pathIso = args[0];
-                Console.WriteLine(pathIso);
                 using (FileStream isoRom = File.Open(pathIso, FileMode.Open, FileAccess.Read))
                 {
                     string romId = null;
@@ -29,18 +28,18 @@ namespace isops2
                         Console.WriteLine("No es iso de ps2 :c");
                     else
                     {
-                        var regex = new Regex(@"[A-Z]{4}_[0-9]+.[0-9]+"); // the regex matches a string of the form "<4 characters>_<some number>.<some number>"
+                        var regex = new Regex(@"[A-Z]{4}_[0-9]+.[0-9]+");
                         CDReader reader = new(isoRom, true);
                         var id = reader.Root.GetFiles()
-                            .Select(file => file.FullName) // Get the full name of all files in the root directory
-                            .Where(file => regex.IsMatch(file)) // Check the filename against the regex
+                            .Select(file => file.FullName)
+                            .Where(file => regex.IsMatch(file))
                             .First();
                         int posicion = id.IndexOf(";");
                         romId = id.Substring(0, posicion);                     
                         Console.WriteLine("RomId: {0}", romId);
                     }
                     isoRom.Close();
-                    Console.WriteLine(Path.GetDirectoryName(pathIso) + "\\" + romId + "." + Path.GetFileName(pathIso));                    
+                    System.IO.File.Move(pathIso, Path.GetDirectoryName(pathIso) + "\\" + romId + "." + Path.GetFileName(pathIso));
                 }
             }
             else
