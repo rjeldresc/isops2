@@ -17,13 +17,11 @@ namespace isops2
                 using (FileStream isoRom = File.Open(pathIso, FileMode.Open, FileAccess.Read))
                 {
                     string romId = null;
-
                     byte[] magicNumberArray = new byte[11];
                     isoRom.Position = 65881;
                     isoRom.Read(magicNumberArray, 0, 11);
                     String magicNumberString = Encoding.ASCII.GetString(magicNumberArray);
                     isoRom.Position = 0;
-
                     if (magicNumberString != "PLAYSTATION")
                         Console.WriteLine("No es iso de ps2 :c");
                     else
