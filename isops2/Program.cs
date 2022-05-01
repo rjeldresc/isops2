@@ -29,7 +29,10 @@ namespace isops2
                         {
                             string romId = GetId(isoRom);
                             isoRom.Close();
-                            RenombrarIso(pathIso, romId);
+                            if (!RomExiste(pathIso, romId))
+                                RenombrarRom(pathIso, romId);
+                            else
+                                Console.WriteLine("Error: Ya existe una rom {0} con el mismo nombre .", romId);
                         }
                         else
                         {
@@ -43,7 +46,10 @@ namespace isops2
                                 case 'S':
                                     string romId = GetId(isoRom);
                                     isoRom.Close();
-                                    RenombrarIso(pathIso, romId);
+                                    if(!RomExiste(pathIso, romId))
+                                        RenombrarRom(pathIso, romId);
+                                    else
+                                        Console.WriteLine("Error: Ya existe una rom {0} con el mismo nombre .", romId);
                                     break;
                                 case 'n':
                                 case 'N':
@@ -89,11 +95,24 @@ namespace isops2
         /// </summary>
         /// <param name="pathIso">ruta completa del archivo</param>
         /// <param name="romId">id de .iso SLUS / SLES</param>
-        private static void RenombrarIso(string pathIso, string romId)
+        private static void RenombrarRom(string pathIso, string romId)
         {
             System.IO.File.Move(pathIso, Path.GetDirectoryName(pathIso) + "\\" + romId + "." + Path.GetFileName(pathIso));
             Console.WriteLine("RomId: {0}", romId);
             Console.WriteLine(".iso renombrada correctamente");
+        }
+
+        /// <summary>
+        /// Valida si ya existe la rom .iso 
+        /// </summary>
+        /// <param name="pathIso">ruta completa del archivo</param>
+        /// <param name="romId"></param>
+        /// <returns>id de .iso SLUS / SLES</returns>
+        private static bool RomExiste(string pathIso, string romId)
+        {
+            if (File.Exists(Path.GetDirectoryName(pathIso) + "\\" + romId + "." + Path.GetFileName(pathIso)))
+                return true;
+            else return false;
         }
     }
 }
