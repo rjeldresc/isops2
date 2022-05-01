@@ -113,12 +113,14 @@ namespace isops2
             string nombreRom = Path.GetFileName(pathIso);
             var regex = new Regex(@"[A-Z]{4}_[0-9]+.[0-9]+");
             var idTemp = regex.IsMatch(nombreRom);
+            //caso cuando el archivo ya tiene el id
             if (idTemp)
             {
                 return true;
             }
             else
             {
+                //caso cuando existen dos archivos iguales en el mismo directorio ,  game.iso  y  SLUS_game.iso
                 if (File.Exists(Path.GetDirectoryName(pathIso) + "\\" + romId + "." + Path.GetFileName(pathIso)))
                     return true;
                 else
