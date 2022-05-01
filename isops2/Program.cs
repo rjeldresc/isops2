@@ -110,9 +110,22 @@ namespace isops2
         /// <returns>id de .iso SLUS / SLES</returns>
         private static bool RomExiste(string pathIso, string romId)
         {
-            if (File.Exists(Path.GetDirectoryName(pathIso) + "\\" + romId + "." + Path.GetFileName(pathIso)))
+            string nombreRom = Path.GetFileName(pathIso);
+            var regex = new Regex(@"[A-Z]{4}_[0-9]+.[0-9]+");
+            var idTemp = regex.IsMatch(nombreRom);
+            if (idTemp)
+            {
                 return true;
-            else return false;
+            }
+            else
+            {
+                if (File.Exists(Path.GetDirectoryName(pathIso) + "\\" + romId + "." + Path.GetFileName(pathIso)))
+                    return true;
+                else
+                {
+                    return false;
+                }
+            }
         }
     }
 }
