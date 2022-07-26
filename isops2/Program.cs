@@ -29,10 +29,10 @@ namespace isops2
                         {
                             string romId = GetId(isoRom);
                             isoRom.Close();
-                            if (!RomExiste(pathIso, romId))
-                                RenombrarRom(pathIso, romId);
-                            else
+                            if (RomExiste(pathIso, romId))
                                 Console.WriteLine("Error: Ya existe una rom {0} con el mismo nombre .", romId);
+                            else
+                                RenombrarRom(pathIso, romId);
                         }
                         else
                         {
@@ -46,7 +46,8 @@ namespace isops2
                                 case 'S':
                                     string romId = GetId(isoRom);
                                     isoRom.Close();
-                                    if(!RomExiste(pathIso, romId))
+                                    bool existe = RomExiste(pathIso, romId);
+                                    if (!existe)
                                         RenombrarRom(pathIso, romId);
                                     else
                                         Console.WriteLine("Error: Ya existe una rom {0} con el mismo nombre .", romId);
@@ -114,19 +115,16 @@ namespace isops2
             var regex = new Regex(@"[A-Z]{4}_[0-9]+.[0-9]+");
             var idTemp = regex.IsMatch(nombreRom);
             //caso cuando el archivo ya tiene el id
-            if (idTemp)
-            {
-                return true;
-            }
+            if (idTemp)            
+                return true;            
             else
             {
                 //caso cuando existen dos archivos iguales en el mismo directorio ,  game.iso  y  SLUS_game.iso
-                if (File.Exists(Path.GetDirectoryName(pathIso) + "\\" + romId + "." + Path.GetFileName(pathIso)))
+                bool hayDuplicado = File.Exists(Path.GetDirectoryName(pathIso) + "\\" + romId + "." + Path.GetFileName(pathIso));
+                if (hayDuplicado)
                     return true;
-                else
-                {
-                    return false;
-                }
+                else                
+                    return false;                
             }
         }
     }
