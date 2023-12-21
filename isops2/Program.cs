@@ -16,7 +16,7 @@ namespace isops2
                 //Llega 1 parametro, el nombre de archivo iso
                 case 1:
                     string pathIso = args[0];
-                    string extension = Path.GetExtension(pathIso).ToLower();
+                    string extension = Path.GetExtension(pathIso)?.ToLower();
                     if (extension == ".iso")
                     {
                         using FileStream isoRom = File.Open(pathIso, FileMode.Open, FileAccess.Read);
@@ -36,8 +36,8 @@ namespace isops2
                         }
                         else
                         {
-                            Console.WriteLine("Error: No es .iso de PS2 :c");
-                            Console.WriteLine("Tamaño: {0} MB , Nombre: {1}", new FileInfo(pathIso).Length / 1024 / 1024, Path.GetFileName(pathIso));
+                            Console.WriteLine("Error: No es un archivo .iso de PS2.");                        
+                            Console.WriteLine($"Tamaño: {new FileInfo(pathIso).Length / 1024 / 1024} MB, Nombre: {Path.GetFileName(pathIso)}");
                             Console.WriteLine("Posiblemente sea un archivo tipo CD de PS2, igualmente forzar renombrar [S] / [N].");
                             char opcion = Convert.ToChar(Console.Read());
                             switch (opcion)
@@ -62,12 +62,12 @@ namespace isops2
                     }
                     else
                     {
-                        Console.WriteLine("Error: No se define archivo .iso");
+                        Console.WriteLine("Error: El archivo no tiene extensión .iso.");
                     }
                     break;
                 //No llegan parametros
                 default:
-                    Console.WriteLine("Error: No se ingresaron argumentos.");
+                    Console.WriteLine("Error: Se esperaba un argumento (nombre de archivo .iso).");
                     break;
             }
         }
@@ -98,7 +98,7 @@ namespace isops2
         /// <param name="romId">id de .iso SLUS / SLES</param>
         private static void RenombrarRom(string pathIso, string romId)
         {
-            System.IO.File.Move(pathIso, Path.GetDirectoryName(pathIso) + "\\" + romId + "." + Path.GetFileName(pathIso));
+            File.Move(pathIso, Path.Combine(Path.GetDirectoryName(pathIso), $"{romId}.{Path.GetFileName(pathIso)}"));
             Console.WriteLine("RomId: {0}", romId);
             Console.WriteLine(".iso renombrada correctamente");
         }
@@ -119,8 +119,8 @@ namespace isops2
                 return true;            
             else
             {
-                //caso cuando existen dos archivos iguales en el mismo directorio ,  game.iso  y  SLUS_game.iso
-                bool hayDuplicado = File.Exists(Path.GetDirectoryName(pathIso) + "\\" + romId + "." + Path.GetFileName(pathIso));
+                //caso cuando existen dos archivos iguales en el mismo directorio ,  game.iso  y  SLUS_game.iso                
+				bool hayDuplicado = File.Exists(Path.Combine(Path.GetDirectoryName(pathIso), $"{romId}.{Path.GetFileName(pathIso)}"));
                 if (hayDuplicado)
                     return true;
                 else                
