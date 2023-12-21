@@ -119,8 +119,8 @@ namespace isops2
                 return true;            
             else
             {
-                //caso cuando existen dos archivos iguales en el mismo directorio ,  game.iso  y  SLUS_game.iso
-                bool hayDuplicado = File.Exists(Path.GetDirectoryName(pathIso) + "\\" + romId + "." + Path.GetFileName(pathIso));
+                //caso cuando existen dos archivos iguales en el mismo directorio ,  game.iso  y  SLUS_game.iso                
+				bool hayDuplicado = File.Exists(Path.Combine(Path.GetDirectoryName(pathIso), $"{romId}.{Path.GetFileName(pathIso)}"));
                 if (hayDuplicado)
                     return true;
                 else                
